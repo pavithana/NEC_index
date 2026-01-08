@@ -1,0 +1,298 @@
+<style>
+.particle-section {
+  padding: 6rem 1rem;
+  background: #0f172a;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.particle-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+  color: white;
+}
+
+.particle-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.particle-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #60A5FA, #A78BFA, #F472B6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.particle-subtitle {
+  color: #CBD5E1;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.particle-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .particle-showcase {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .particle-title {
+    font-size: 2.5rem;
+  }
+}
+
+.particle-image-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.particle-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.particle-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.particle-btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.particle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.particle-btn.active {
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+}
+
+.particle-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .particle-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+.particle-feature {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.particle-feature:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  color: #60A5FA;
+  margin-bottom: 1rem;
+}
+</style>
+
+<section class="particle-section">
+  <canvas class="particle-canvas" id="particleCanvas"></canvas>
+  
+  <div class="particle-content">
+    <div class="particle-header">
+      <h2 class="particle-title">Dynamic Engineering Network</h2>
+      <p class="particle-subtitle">Our interconnected divisions form a living ecosystem of innovation and expertise</p>
+    </div>
+    
+    <div class="particle-showcase">
+      <div class="particle-image-container">
+        <img src="web home .png" alt="Engineering Network" class="particle-image">
+        
+        <div class="particle-controls">
+          <button class="particle-btn active" onclick="setParticleMode('form')">
+            <i class="fas fa-project-diagram mr-2"></i>Form Pattern
+          </button>
+          <button class="particle-btn" onclick="setParticleMode('disperse')">
+            <i class="fas fa-atom mr-2"></i>Disperse
+          </button>
+          <button class="particle-btn" onclick="setParticleMode('flow')">
+            <i class="fas fa-stream mr-2"></i>Flow
+          </button>
+        </div>
+      </div>
+      
+      <div class="particle-features">
+        <div class="particle-feature">
+          <div class="feature-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Connected Intelligence</h3>
+          <p class="text-gray-300">Real-time collaboration across all divisions</p>
+        </div>
+        
+        <div class="particle-feature">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Dynamic Adaptation</h3>
+          <p class="text-gray-300">Flexible resource allocation based on project needs</p>
+        </div>
+        
+        <div class="particle-feature">
+          <div class="feature-icon">
+            <i class="fas fa-infinity"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Continuous Flow</h3>
+          <p class="text-gray-300">Seamless workflow integration and data sharing</p>
+        </div>
+        
+        <div class="particle-feature">
+          <div class="feature-icon">
+            <i class="fas fa-satellite"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Global Network</h3>
+          <p class="text-gray-300">Connected expertise across five continents</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Simplified particle system for demonstration
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mode = 'form';
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  initParticles();
+}
+
+function initParticles() {
+  particles = [];
+  const particleCount = 200;
+  
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedX: Math.random() * 2 - 1,
+      speedY: Math.random() * 2 - 1,
+      color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+      targetX: canvas.width / 2 + Math.cos(i) * 200,
+      targetY: canvas.height / 2 + Math.sin(i) * 200
+    });
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw connecting lines
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 100) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(96, 165, 250, ${0.2 * (1 - distance/100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  
+  // Update and draw particles
+  particles.forEach(p => {
+    if (mode === 'form') {
+      p.x += (p.targetX - p.x) * 0.05;
+      p.y += (p.targetY - p.y) * 0.05;
+    } else if (mode === 'disperse') {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      
+      // Bounce off walls
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    } else if (mode === 'flow') {
+      p.x += Math.sin(p.y * 0.01) * 0.5;
+      p.y += Math.cos(p.x * 0.01) * 0.5;
+    }
+    
+    ctx.beginPath();
+    ctx.fillStyle = p.color;
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  requestAnimationFrame(animateParticles);
+}
+
+function setParticleMode(newMode) {
+  mode = newMode;
+  document.querySelectorAll('.particle-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (mode === 'form') {
+    particles.forEach((p, i) => {
+      p.targetX = canvas.width / 2 + Math.cos(i) * 200;
+      p.targetY = canvas.height / 2 + Math.sin(i) * 200;
+    });
+  }
+}
+
+// Initialize
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+animateParticles();
+</script>
